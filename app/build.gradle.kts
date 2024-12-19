@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
 }
 
 android {
@@ -44,6 +45,34 @@ dependencies {
     implementation("androidx.compose.ui:ui-text-google-fonts:1.7.5")
     //google icons
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
+
+//Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1") // For annotation processing
+    implementation("androidx.room:room-ktx:2.6.1") // For Kotlin extensions and coroutines support
+    testImplementation("androidx.room:room-testing:2.6.1")
+
+
+//HILT
+    implementation("androidx.hilt:hilt-work:1.2.0")
+    // When using Kotlin.
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    // Optional: SavedState module for ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+
+    // ViewModel for Jetpack Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    //Gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

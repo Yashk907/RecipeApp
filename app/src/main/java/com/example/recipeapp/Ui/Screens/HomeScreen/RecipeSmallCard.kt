@@ -54,25 +54,27 @@ import com.example.recipeapp.R
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import java.nio.file.WatchEvent
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    RecipeAppTheme {
+//        RecipeSmallCard(modifier = Modifier
+//            .statusBarsPadding()
+//            .padding(20.dp))
+//    }
+//
+//}
+
+
 @Composable
-private fun Preview() {
-    RecipeAppTheme {
-        RecipeSmallCard(modifier = Modifier
-            .statusBarsPadding()
-            .padding(20.dp))
-    }
-
-}
-
-
-@Composable
-fun RecipeSmallCard(modifier: Modifier = Modifier) {
+fun RecipeSmallCard(images :Int ,
+                    modifier: Modifier = Modifier) {
 Card (modifier= modifier.fillMaxWidth(),
     shape = RoundedCornerShape(20.dp)){
     Box(modifier= Modifier.fillMaxWidth()
     ){
-        RecipeImage(modifier= Modifier.align(Alignment.Center))
+        RecipeImage(images ,
+            modifier= Modifier.align(Alignment.Center))
         RecipeInfo(modifier = Modifier
             .align(Alignment.CenterStart)
             .padding(start = 20.dp)
@@ -86,8 +88,9 @@ Card (modifier= modifier.fillMaxWidth(),
 }
 
 @Composable
-fun RecipeImage(modifier: Modifier = Modifier) {
-    Image(painter = painterResource(R.drawable.sandwich_ex),
+fun RecipeImage(Image : Int,
+                modifier: Modifier = Modifier) {
+    Image(painter = painterResource(Image),
         "Image of dish",
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.tint(Color.Gray,

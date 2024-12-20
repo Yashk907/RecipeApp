@@ -20,39 +20,47 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import com.example.recipeapp.Navigation.Screens
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 
 data class DrawerItem(
     val string: String,
+    val ScreenName : String,
     val selectedicon: ImageVector,
     val unselectedicon : ImageVector
 )
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    RecipeAppTheme {
+//        Scaffold(bottomBar = {CustomBottomBar()})
+//        { padding->
+//            Box(modifier = Modifier.padding(padding))
+//        }
+//
+//    }
+//}
 @Composable
-private fun Preview() {
-    RecipeAppTheme {
-        Scaffold(bottomBar = {CustomBottomBar()})
-        { padding->
-            Box(modifier = Modifier.padding(padding))
-        }
-
-    }
-}
-@Composable
-fun CustomBottomBar(modifier: Modifier = Modifier) {
+fun CustomBottomBar(navController: NavController,
+                    modifier: Modifier = Modifier) {
     val navigationItem=listOf(
         DrawerItem(
             string = "Recipes",
+            ScreenName = "${Screens.HOMESCREEN}",
             selectedicon = Icons.Filled.Dining,
             unselectedicon = Icons.Outlined.Dining,
         ),
         DrawerItem(
             string = "Add",
+            ScreenName = "${Screens.CREATESCREEN}",
             selectedicon = Icons.Filled.AddCircle,
             unselectedicon = Icons.Outlined.AddCircleOutline
         ),
         DrawerItem(
             string = "Social",
+            ScreenName = "${Screens.SOCIALSCREEN}",
             selectedicon = Icons.Filled.Public,
             unselectedicon = Icons.Outlined.Public
         ),
@@ -66,6 +74,7 @@ fun CustomBottomBar(modifier: Modifier = Modifier) {
             NavigationBarItem(
                 selected = selectedDrawerIndex==index,
                 onClick = {
+                    navController.navigate(route = it.ScreenName) {  }
                     selectedDrawerIndex=index
                 },
                 icon = {

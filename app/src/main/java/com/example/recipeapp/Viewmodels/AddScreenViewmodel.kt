@@ -1,5 +1,6 @@
 package com.example.recipeapp.Viewmodels
 
+import android.util.Log
 import androidx.compose.ui.graphics.evaluateCubic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,8 +24,8 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
     private val _state = MutableStateFlow(RecipeState())
     val state : StateFlow<RecipeState>
         get() =_state
-
     fun onAddRecipeEvent(events: AddRecipeEvents){
+        Log.d("yash Recipe",RecipeRepo.RecipeList.value.toString())
         when(events) {
             is AddRecipeEvents.addDirectionsList -> {
                 _state.update{
@@ -79,6 +80,17 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
                 )
                 viewModelScope.launch{
                     RecipeRepo.createRecipe(Recipe)
+                }
+                _state.update{
+                    it.copy(
+                        Title = "",
+                        Duration="",
+                        Category = "",
+                        Image = null,
+                        IngredientList = listOf(),
+                        DirectionsList = listOf()
+
+                    )
                 }
 
             }

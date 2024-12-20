@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 class RecipeRoomRepo @Inject constructor(private val dao : RecipeDao) {
 
-    private val _RecipeList : MutableStateFlow<RecipeEntity> = MutableStateFlow(RecipeEntity())
-    val RecipeList : StateFlow<RecipeEntity>
+    private val _RecipeList : MutableStateFlow<List<RecipeEntity>> = MutableStateFlow(listOf())
+    val RecipeList : StateFlow<List<RecipeEntity>>
         get() =_RecipeList
 
     suspend fun getAllRecipes() = dao.getAllRecipes()

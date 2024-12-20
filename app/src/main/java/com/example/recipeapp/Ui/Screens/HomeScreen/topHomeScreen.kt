@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.example.recipeapp.R
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 
-@Preview(showBackground = true)
+@Preview(showSystemUi = true)
 @Composable
 private fun Preview2() {
     RecipeAppTheme {
@@ -44,19 +45,20 @@ private fun Preview2() {
 }
 
 @Composable
-fun TopComponentMainScreen(modifier: Modifier = Modifier) {
+fun TopComponentMainScreen(
+modifier: Modifier = Modifier) {
     Card (colors = CardDefaults.cardColors(Color.Transparent),
         modifier = modifier){
         Box (modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp) // padding for the box
+            .padding(start = 15.dp, end = 15.dp,top=8.dp, bottom = 0.dp) // padding for the box
         ){
             TextComponent(modifier = Modifier.align(Alignment.TopStart))
             AvatarComponent(modifier= Modifier.align(Alignment.TopEnd))
 
         }
         SearchBarComponent(modifier= Modifier
-            .padding(start = 12.dp, end = 12.dp, top = 5.dp, bottom = 15.dp))
+            .padding(start = 12.dp, end = 12.dp, top = 0.dp, bottom = 15.dp))
     }
 }
 

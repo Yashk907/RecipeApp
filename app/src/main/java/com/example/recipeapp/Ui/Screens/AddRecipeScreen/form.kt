@@ -37,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -48,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
@@ -58,65 +60,71 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.recipeapp.Setups.AddRecipeSetup.AddRecipeEvents
+import com.example.recipeapp.Setups.AddRecipeSetup.RecipeState
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import java.time.Duration
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    RecipeAppTheme {
+//        Scaffold (topBar = { CustomTopAppBar() },
+//            bottomBar = {CustomBottomBar()}){padding->
+//            Box(modifier = Modifier
+//                .padding(padding)
+//                .fillMaxSize()){
+//                RecipeForm(modifier = Modifier
+//                    .statusBarsPadding()
+//                    .padding(horizontal = 10.dp, vertical = 10.dp))
+//            }
+//
+//        }
+//
+//    }
+//
+//}
 @Composable
-private fun Preview() {
-    RecipeAppTheme {
-        Scaffold (topBar = { CustomTopAppBar() },
-            bottomBar = {CustomBottomBar()}){padding->
-            Box(modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()){
-                RecipeForm(modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 10.dp, vertical = 10.dp))
-            }
-
-        }
-
-    }
-
-}
-@Composable
-fun RecipeForm(modifier: Modifier = Modifier) {
+fun RecipeForm(onEvent : (AddRecipeEvents)-> Unit,
+               state: RecipeState,
+               modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
-
-    Card (elevation = CardDefaults.elevatedCardElevation(10.dp),
+    Column (
         modifier = modifier
             .verticalScroll(scrollState)){
         Column(modifier=Modifier.padding(5.dp))
         {//title
             TitleOfComponent("Name Of the Recipe")
-            title()
+            title(state,onEvent,)
             TitleOfComponent("Duration")
             Row {
                 //Duration
-                Duration()
+                Duration(state,onEvent,)
                 //radio buttonsWith Category
-                Veg_NonVeg()
+                Veg_NonVeg(state,onEvent,)
 
             }
             TitleOfComponent("Image")
-            Image()
+            Image(state,onEvent,)
            TitleOfComponent("Ingredient")
-            Ingredients()
+            Ingredients(state,onEvent,)
             TitleOfComponent("Directions")
-            Directions()
-            CreateButton(modifier= Modifier.align(Alignment.End))
+            Directions(state,onEvent,)
+            CreateButton(state,
+                onEvent,
+                modifier= Modifier.align(Alignment.End))
         }
 
     }
 }
 
 @Composable
-fun title(modifier: Modifier = Modifier) {
-    var RecipeName by rememberSaveable { mutableStateOf("") }
-    OutlinedTextField(value = RecipeName,
+fun title(state: RecipeState,
+          onEvent : (AddRecipeEvents)-> Unit,
+          modifier: Modifier = Modifier) {
+    OutlinedTextField(value = state.Title,
         onValueChange = {it->
-            RecipeName=it
+            onEvent(AddRecipeEvents.setTitle(it))
         },
         label = {
             Text(text = "Title Of Recipe ")
@@ -128,10 +136,11 @@ fun title(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Duration(modifier: Modifier = Modifier) {
-    var Duration by rememberSaveable { mutableStateOf("") }
-    OutlinedTextField(value = Duration,
-        onValueChange = {Duration=it},
+fun Duration(state: RecipeState,
+             onEvent : (AddRecipeEvents)-> Unit,
+             modifier: Modifier = Modifier) {
+    OutlinedTextField(value = state.Duration,
+        onValueChange = {onEvent(AddRecipeEvents.setDuration(it))},
         label = {Text(text = "Time",
             textAlign = TextAlign.Center)},
         modifier= Modifier
@@ -141,8 +150,20 @@ fun Duration(modifier: Modifier = Modifier) {
     )
 }
 
+//SetThis from this point
+
+
+
+
+
+
+
+
+
 @Composable
-fun Veg_NonVeg(modifier: Modifier = Modifier) {
+fun Veg_NonVeg(state: RecipeState,
+               onEvent : (AddRecipeEvents)-> Unit,
+               modifier: Modifier = Modifier) {
     val category =listOf("Veg","Nonveg")
     var selectedcategory by rememberSaveable { mutableStateOf(3) }
     category.forEachIndexed { index, string ->
@@ -160,7 +181,9 @@ fun Veg_NonVeg(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Image(modifier: Modifier = Modifier) {
+fun Image(state: RecipeState,
+          onEvent : (AddRecipeEvents)-> Unit,
+          modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -198,7 +221,9 @@ fun Image(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Ingredients(modifier: Modifier = Modifier) {
+fun Ingredients(state: RecipeState,
+                onEvent : (AddRecipeEvents)-> Unit,
+                modifier: Modifier = Modifier) {
     // Using mutableStateListOf to ensure recomposition when the list changes
     val list = remember { mutableStateListOf(Pair("", "")) }
 
@@ -235,7 +260,6 @@ fun Ingredients(modifier: Modifier = Modifier) {
             }
         }
 
-        Log.d("yash", list.toString())
 
         // Add New Ingredient Button
         IconButton(onClick = {
@@ -258,7 +282,9 @@ fun Ingredients(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Directions(modifier: Modifier = Modifier) {
+fun Directions(state: RecipeState,
+               onEvent : (AddRecipeEvents)-> Unit,
+               modifier: Modifier = Modifier) {
     var DirectionList = remember{ mutableStateListOf("") }
 //var Directions by rememberSaveable { mutableStateOf("") }
 
@@ -308,11 +334,14 @@ fun TitleOfComponent(text : String,
 }
 
 @Composable
-fun CreateButton(modifier: Modifier = Modifier) {
+fun CreateButton(state: RecipeState,
+                 onEvent : (AddRecipeEvents)-> Unit,
+                 modifier: Modifier = Modifier) {
 //adding logic when the button is activated and when not
-    Button(onClick = {},
+    Button(onClick = {onEvent(AddRecipeEvents.CreateRecipe(state))},
         modifier) {
         Text(text = "Create",
             style = MaterialTheme.typography.titleSmall)
+
     }
 }

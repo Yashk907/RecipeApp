@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -54,24 +55,30 @@ dependencies {
 
 
 //HILT
-    implementation("androidx.hilt:hilt-work:1.2.0")
-    // When using Kotlin.
-    kapt("androidx.hilt:hilt-compiler:1.2.0")
-    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
-    // Optional: SavedState module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
-
-    //navigation
-    implementation("androidx.navigation:navigation-compose:2.7.4")
+    //Dagger - Hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
 
     // ViewModel for Jetpack Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
+    // Optional: LiveData support
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+
+    // Optional: SavedState module for ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+    // Hilt Navigation for Jetpack Compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+
     //Gson
     implementation("com.google.code.gson:gson:2.10.1")
 
+    implementation("androidx.work:work-runtime-ktx:2.10.0")//workManager
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

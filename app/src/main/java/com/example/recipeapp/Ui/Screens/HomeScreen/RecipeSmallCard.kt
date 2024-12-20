@@ -51,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipeapp.R
+import com.example.recipeapp.Room.RecipeEntity
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import java.nio.file.WatchEvent
 
@@ -67,15 +68,18 @@ import java.nio.file.WatchEvent
 
 
 @Composable
-fun RecipeSmallCard(images :Int ,
+fun RecipeSmallCard(state : RecipeEntity ,
                     modifier: Modifier = Modifier) {
-Card (modifier= modifier.fillMaxWidth(),
+Card (modifier= modifier.fillMaxWidth()
+    .clickable{
+
+    },
     shape = RoundedCornerShape(20.dp)){
     Box(modifier= Modifier.fillMaxWidth()
     ){
-        RecipeImage(images ,
-            modifier= Modifier.align(Alignment.Center))
-        RecipeInfo(modifier = Modifier
+//        RecipeImage( ,
+//            modifier= Modifier.align(Alignment.Center))
+        RecipeInfo(state,modifier = Modifier
             .align(Alignment.CenterStart)
             .padding(start = 20.dp)
             .fillMaxWidth(0.6f))
@@ -101,7 +105,8 @@ fun RecipeImage(Image : Int,
 }
 
 @Composable
-fun RecipeInfo(modifier: Modifier = Modifier) {
+fun RecipeInfo(state: RecipeEntity,
+               modifier: Modifier = Modifier) {
     Column (modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)){
         Card(colors = CardDefaults.cardColors(contentColor =Color.White)) {
@@ -111,7 +116,7 @@ fun RecipeInfo(modifier: Modifier = Modifier) {
                 modifier= Modifier.padding(vertical = 5.dp,
                     horizontal = 5.dp))
         }
-        Text(text = "Sweet BreakFast Sandwich",
+        Text(text = state.title,
             fontWeight = FontWeight.Light,
             style = MaterialTheme.typography.titleMedium,
             color = Color.White,

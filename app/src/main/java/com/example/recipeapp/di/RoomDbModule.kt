@@ -19,16 +19,11 @@ object RoomDbModule{
     @Singleton
     fun ProvideRoom(@ApplicationContext context: Context) =Room.databaseBuilder(
     context, RecipeDatabse::class.java, "Recipe_Database")
-    .allowMainThreadQueries()
-    .fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigration()
     .build()
 
     @Provides
     @Singleton
     fun ProvideDao(db: RecipeDatabse)= db.dao
-
-    @Provides
-    @Singleton
-    fun ProvideEntity() = RecipeEntity()
 
 }

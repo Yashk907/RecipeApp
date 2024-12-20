@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,9 +37,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.recipeapp.R
-import com.example.recipeapp.Ui.Screens.HomeScreen.CardStack
 import com.example.recipeapp.Ui.Screens.HomeScreen.RecipeSmallCard
+import com.example.recipeapp.Viewmodels.HomeScreenViewmodel
 import com.example.recipeapp.datastore
 import com.example.recipeapp.datastoreTemp
 import com.example.recipeapp.ui.theme.RecipeAppTheme
@@ -48,12 +52,13 @@ import com.example.recipeapp.ui.theme.RecipeAppTheme
     (showSystemUi = true)
 @Composable
 private fun Preview() {
+    val navController =rememberNavController()
     RecipeAppTheme {Scaffold(
         topBar = {
             CustomTopAppBar()
         },
         bottomBar = {
-            CustomBottomBar()
+            CustomBottomBar(navController )
         }
 
     ) {padding->
@@ -63,8 +68,12 @@ private fun Preview() {
 
 }
 
+
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+               modifier: Modifier = Modifier) {
+    val viewmodel : HomeScreenViewmodel = hiltViewModel()
+    val list = viewmodel.RecipeList.collectAsState()
     LazyColumn(modifier=modifier) {
         item{
             TopComponentMainScreen(modifier= Modifier)
@@ -81,8 +90,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 //            }
 
 //        }
-        items(datastore().list) { item ->//this is temporary datastore
-            RecipeSmallCard(images = item.image,
+        items(list.value) { item ->//this is temporary datastore
+            RecipeSmallCard(state = item,
                 modifier= Modifier.padding(horizontal = 13.dp, vertical = 10.dp)
 
             )

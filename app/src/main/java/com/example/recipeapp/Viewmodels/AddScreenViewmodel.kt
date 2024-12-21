@@ -25,7 +25,6 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
     val state : StateFlow<RecipeState>
         get() =_state
     fun onAddRecipeEvent(events: AddRecipeEvents){
-        Log.d("yash Recipe",RecipeRepo.RecipeList.value.toString())
         when(events) {
             is AddRecipeEvents.addDirectionsList -> {
                 _state.update{
@@ -37,7 +36,7 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
             is AddRecipeEvents.addImage -> {
                 _state.update{
                     it.copy(
-                        Image = events.image
+                        ImageUri = events.image
                     )
                 }
             }
@@ -70,25 +69,26 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
             }
 
             is AddRecipeEvents.CreateRecipe -> {
-                val Recipe = RecipeEntity(
+                val recipe = RecipeEntity(
                     title=state.value.Title,
                     Duration=state.value.Duration,
                     Category = state.value.Category,
                     Ingredients=state.value.IngredientList,
                     Directions = state.value.DirectionsList,
-                    image = state.value.Image
+                    image = state.value.ImageUri
                 )
+                Log.d("yashtest1",recipe.toString())
                 viewModelScope.launch{
-                    RecipeRepo.createRecipe(Recipe)
+                    RecipeRepo.createRecipe(recipe)
                 }
                 _state.update{
                     it.copy(
                         Title = "",
                         Duration="",
                         Category = "",
-                        Image = null,
-                        IngredientList = listOf(),
-                        DirectionsList = listOf()
+                        ImageUri = null,
+                        IngredientList = listOf(Pair("","")),
+                        DirectionsList = listOf("")
 
                     )
                 }

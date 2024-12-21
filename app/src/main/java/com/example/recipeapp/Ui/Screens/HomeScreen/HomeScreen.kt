@@ -1,4 +1,5 @@
 
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -43,37 +44,37 @@ import androidx.navigation.compose.rememberNavController
 import com.example.recipeapp.R
 import com.example.recipeapp.Ui.Screens.HomeScreen.RecipeSmallCard
 import com.example.recipeapp.Viewmodels.HomeScreenViewmodel
-import com.example.recipeapp.datastore
-import com.example.recipeapp.datastoreTemp
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-    (showSystemUi = true)
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Preview
+//    (showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    val navController =rememberNavController()
+//    RecipeAppTheme {Scaffold(
+//        topBar = {
+//            CustomTopAppBar()
+//        },
+//        bottomBar = {
+//            CustomBottomBar(navController )
+//        }
+//
+//    ) {padding->
+//        HomeScreen(modifier = Modifier.padding(padding))
+//    }  }
+//
+//
+//}
+
+
 @Composable
-private fun Preview() {
-    val navController =rememberNavController()
-    RecipeAppTheme {Scaffold(
-        topBar = {
-            CustomTopAppBar()
-        },
-        bottomBar = {
-            CustomBottomBar(navController )
-        }
-
-    ) {padding->
-        HomeScreen(modifier = Modifier.padding(padding))
-    }  }
-
-
-}
-
-
-@Composable
-fun HomeScreen(
+fun HomeScreen(onClickCard : (id : Int)-> Unit,
                modifier: Modifier = Modifier) {
     val viewmodel : HomeScreenViewmodel = hiltViewModel()
+    val onEvent =viewmodel::onActionHomeScreen
     val list = viewmodel.RecipeList.collectAsState()
+    Log.d("RecipeList1",list.value.toString())
     LazyColumn(modifier=modifier) {
         item{
             TopComponentMainScreen(modifier= Modifier)
@@ -91,7 +92,10 @@ fun HomeScreen(
 
 //        }
         items(list.value) { item ->//this is temporary datastore
+
             RecipeSmallCard(state = item,
+                onEvent = onEvent
+                ,onClickCard,
                 modifier= Modifier.padding(horizontal = 13.dp, vertical = 10.dp)
 
             )

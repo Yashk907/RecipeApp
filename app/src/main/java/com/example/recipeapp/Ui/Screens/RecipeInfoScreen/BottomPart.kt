@@ -28,26 +28,30 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.recipeapp.Room.RecipeEntity
+import com.example.recipeapp.Viewmodels.RecipeInfoState
+import com.example.recipeapp.Viewmodels.RecipeScreenViewmodel
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 
 //selecting Ingredient and Recipe card
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    RecipeAppTheme {
+//        Scaffold (){padding->
+//            Box(modifier = Modifier.padding(padding)
+//                .fillMaxSize()){
+//                CategoryCard(modifier = Modifier.padding(horizontal = 50.dp))
+//
+//            }
+//        }
+//    }
+//
+//}
+
 @Composable
-private fun Preview() {
-    RecipeAppTheme {
-        Scaffold (){padding->
-            Box(modifier = Modifier.padding(padding)
-                .fillMaxSize()){
-                CategoryCard(modifier = Modifier.padding(horizontal = 50.dp))
-
-            }
-        }
-    }
-
-}
-
-@Composable
-fun CategoryCard(modifier: Modifier = Modifier) {
+fun CategoryCard(viewmodel: RecipeScreenViewmodel,
+                 modifier: Modifier = Modifier) {
     Card(shape = RoundedCornerShape(50.dp),
         modifier = modifier.fillMaxWidth()) {
         var selectedItem by rememberSaveable { mutableStateOf(0) }
@@ -62,6 +66,11 @@ fun CategoryCard(modifier: Modifier = Modifier) {
                 .background(color = if(selectedItem==index) Color.White else Color.Transparent)
                 .clickable{
                     selectedItem=index
+                    if(selectedItem==1){
+                        viewmodel.IsIngredientScreen(false)
+                    }else{
+                        viewmodel.IsIngredientScreen(true)
+                    }
                 }
                 .padding(5.dp)){
                 Text(text = string,

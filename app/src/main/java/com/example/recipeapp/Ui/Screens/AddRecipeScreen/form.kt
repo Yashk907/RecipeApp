@@ -3,10 +3,17 @@ package com.example.recipeapp.Ui.Screens.AddRecipeScreen
 import CustomBottomBar
 import CustomTopAppBar
 import android.R
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.media.Image
 import android.text.Layout
 import android.util.Log
 import android.widget.RadioButton
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,6 +36,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -55,11 +63,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import coil3.compose.AsyncImage
 import com.example.recipeapp.Setups.AddRecipeSetup.AddRecipeEvents
 import com.example.recipeapp.Setups.AddRecipeSetup.RecipeState
 import com.example.recipeapp.ui.theme.RecipeAppTheme
@@ -110,6 +122,7 @@ fun RecipeForm(onEvent : (AddRecipeEvents)-> Unit,
             Ingredients(state,onEvent,)
             TitleOfComponent("Directions")
             Directions(state,onEvent,)
+
             CreateButton(state,
                 onEvent,
                 modifier= Modifier.align(Alignment.End))
@@ -141,7 +154,7 @@ fun Duration(state: RecipeState,
              modifier: Modifier = Modifier) {
     OutlinedTextField(value = state.Duration,
         onValueChange = {onEvent(AddRecipeEvents.setDuration(it))},
-        label = {Text(text = "Time",
+        label = {Text(text = "Time ",
             textAlign = TextAlign.Center)},
         modifier= Modifier
             .fillMaxWidth(0.3f)
@@ -164,13 +177,16 @@ fun Duration(state: RecipeState,
 fun Veg_NonVeg(state: RecipeState,
                onEvent : (AddRecipeEvents)-> Unit,
                modifier: Modifier = Modifier) {
-    val category =listOf("Veg","Nonveg")
+    val category =listOf("Veg","Non-Veg")
     var selectedcategory by rememberSaveable { mutableStateOf(3) }
     category.forEachIndexed { index, string ->
         Row (modifier= Modifier.selectable(selected = index==selectedcategory,
             onClick = {selectedcategory=index})){
             RadioButton(selected = index==selectedcategory,
-                onClick = {selectedcategory=index} ,
+                onClick = {
+                    selectedcategory=index
+                    onEvent(AddRecipeEvents.setCategory(category[index]))
+                } ,
                 modifier= Modifier.semantics { string }
             )
             Text(text = string,
@@ -184,6 +200,27 @@ fun Veg_NonVeg(state: RecipeState,
 fun Image(state: RecipeState,
           onEvent : (AddRecipeEvents)-> Unit,
           modifier: Modifier = Modifier) {
+    //photo pick logic
+// Get the context
+    val context = LocalContext.current
+
+    // PhotoPicker launcher
+    val photoPicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri ->
+        uri?.let {
+            try {
+                // Persist URI permission
+                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                context.contentResolver.takePersistableUriPermission(it, flag)
+
+                // Pass the URI as a string to the event handler
+                onEvent(AddRecipeEvents.addImage(it.toString()))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -199,12 +236,19 @@ fun Image(state: RecipeState,
             }
             .background(Color.White) // Add a background if needed
     ){
+        if (state.ImageUri!=null){
+            AsyncImage(state.ImageUri.toUri(),"",
+                contentScale = ContentScale.Crop)
+        }
+
         Column(modifier= Modifier.align(Alignment.Center)) { Text("Add Image",
             style = MaterialTheme.typography.labelMedium)
             IconButton(onClick = {
                 //PhotoPicker Logic
+                photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             },
-                ) {
+                enabled =true
+            ) {
                 Box(modifier = Modifier
                     .clip(CircleShape)
                     .background(Color.White)
@@ -225,13 +269,13 @@ fun Ingredients(state: RecipeState,
                 onEvent : (AddRecipeEvents)-> Unit,
                 modifier: Modifier = Modifier) {
     // Using mutableStateListOf to ensure recomposition when the list changes
-    val list = remember { mutableStateListOf(Pair("", "")) }
-
+    val list = state.IngredientList.toMutableList()
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
     ) {
+
         list.forEachIndexed { index, pair ->
             Row {
                 // Ingredient Name Input
@@ -240,6 +284,7 @@ fun Ingredients(state: RecipeState,
                     label = { Text(text = "Ingredient Name") },
                     onValueChange = { newValue ->
                         list[index] = pair.copy(first = newValue)
+                        onEvent(AddRecipeEvents.addIngredientList(list))
                     },
                     modifier = Modifier
                         .fillMaxWidth(0.7f)
@@ -252,6 +297,7 @@ fun Ingredients(state: RecipeState,
                     label = { Text(text = "Weight") },
                     onValueChange = { newValue ->
                         list[index] = pair.copy(second = newValue)
+                        onEvent(AddRecipeEvents.addIngredientList(list))
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -264,6 +310,7 @@ fun Ingredients(state: RecipeState,
         // Add New Ingredient Button
         IconButton(onClick = {
             list.add(Pair("", ""))
+            onEvent(AddRecipeEvents.addIngredientList(list))
         }) {
             Box(
                 modifier = Modifier
@@ -281,13 +328,12 @@ fun Ingredients(state: RecipeState,
     }
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun Directions(state: RecipeState,
                onEvent : (AddRecipeEvents)-> Unit,
                modifier: Modifier = Modifier) {
-    var DirectionList = remember{ mutableStateListOf("") }
-//var Directions by rememberSaveable { mutableStateOf("") }
-
+    val DirectionList = state.DirectionsList.toMutableList()
         Column(modifier= modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
@@ -297,6 +343,7 @@ fun Directions(state: RecipeState,
                 label = {Text(text = "Step ${index+1}")},
                 onValueChange = {newvalue->
                     DirectionList[index]=newvalue
+                    onEvent(AddRecipeEvents.addDirectionsList(DirectionList))
                 },
                 modifier= Modifier
                     .fillMaxWidth()
@@ -306,6 +353,7 @@ fun Directions(state: RecipeState,
         }
             IconButton(onClick = {
                 DirectionList.add("")
+                onEvent(AddRecipeEvents.addDirectionsList(DirectionList))
             }) {
                 Box(modifier = Modifier
                     .clip(CircleShape)
@@ -345,3 +393,5 @@ fun CreateButton(state: RecipeState,
 
     }
 }
+
+

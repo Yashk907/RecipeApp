@@ -24,19 +24,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipeapp.R
+import com.example.recipeapp.Room.RecipeEntity
 
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
+//@Composable
+//private fun Preview() {
+//    TitleOfRecipe(modifier = Modifier
+//        .statusBarsPadding()
+//        .fillMaxWidth()
+//        .padding(horizontal = 60.dp))
+//}
 @Composable
-private fun Preview() {
-    TitleOfRecipe(modifier = Modifier
-        .statusBarsPadding()
-        .fillMaxWidth()
-        .padding(horizontal = 60.dp))
-}
-@Composable
-fun TitleOfRecipe(modifier: Modifier = Modifier) {
+fun TitleOfRecipe(state : RecipeEntity,
+                  modifier: Modifier = Modifier) {
     Column(modifier=modifier){
-        Text(text = "Sweet Potato Sandwich and samosa with chutney",
+        Text(text = state.title,
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
             letterSpacing = 1.sp,
@@ -50,26 +52,26 @@ fun TitleOfRecipe(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             modifier=Modifier.align(Alignment.CenterHorizontally))
-        TimeAndCategory(modifier= Modifier.align(Alignment.CenterHorizontally)
+        TimeAndCategory(state,modifier= Modifier.align(Alignment.CenterHorizontally)
             .padding(vertical = 5.dp))
     }
 }
 
 @Composable
-fun TimeAndCategory(modifier: Modifier = Modifier) {
+fun TimeAndCategory(state: RecipeEntity,modifier: Modifier = Modifier) {
     Row(modifier) {
-        DurationOFRecipe()
-        VegOrNonVeg(IsNonVeg = true,modifier= Modifier.padding(start = 20.dp))
+        DurationOFRecipe(state)
+        VegOrNonVeg(state,modifier= Modifier.padding(start = 20.dp))
     }
 }
 
 @Composable
-fun DurationOFRecipe(modifier: Modifier = Modifier) {
+fun DurationOFRecipe(state: RecipeEntity,modifier: Modifier = Modifier) {
     Row (modifier){
         Icon(imageVector = Icons.Filled.AccessTimeFilled,
             contentDescription = "Timer Icon",
             tint = Color(0xFF1ebd4a))
-        Text(text = "20 Mins",
+        Text(text = state.Duration,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             style = MaterialTheme.typography.titleSmall,
@@ -78,8 +80,9 @@ fun DurationOFRecipe(modifier: Modifier = Modifier) {
     }
 }
 @Composable
-fun VegOrNonVeg(IsNonVeg : Boolean,
+fun VegOrNonVeg(state: RecipeEntity,
                 modifier: Modifier = Modifier) {
+    val IsNonVeg =state.Category=="Non-Veg"
     val tint =if(IsNonVeg) Color.Red else Color(0xFF1ebd4a)
     val text = if (IsNonVeg) "Non-Veg" else "Veg"
     Row (modifier){

@@ -10,7 +10,7 @@ data class RecipeEntity(
     val Category : String ="",
     val Ingredients : List<Pair<String, String>> = listOf(),
     val Directions : List<String> = listOf(),
-    val image : ByteArray?=null,
+    val image : String?=null,
     @PrimaryKey(autoGenerate = true)
     val id  : Int =0
 )

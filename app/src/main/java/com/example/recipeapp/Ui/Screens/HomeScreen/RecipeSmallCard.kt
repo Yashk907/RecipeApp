@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Dining
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Image
@@ -50,8 +52,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil3.compose.AsyncImage
 import com.example.recipeapp.R
 import com.example.recipeapp.Room.RecipeEntity
+import com.example.recipeapp.Setups.HomeScreenSetup.HomeScreenActions
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import java.nio.file.WatchEvent
 
@@ -69,43 +74,49 @@ import java.nio.file.WatchEvent
 
 @Composable
 fun RecipeSmallCard(state : RecipeEntity ,
+                    onEvent : (HomeScreenActions)-> Unit,
+                    onClick :(id : Int) -> Unit,
                     modifier: Modifier = Modifier) {
-Card (modifier= modifier.fillMaxWidth()
-    .clickable{
-
-    },
+Card (modifier= modifier.fillMaxWidth(),
     shape = RoundedCornerShape(20.dp)){
     Box(modifier= Modifier.fillMaxWidth()
     ){
-//        RecipeImage( ,
-//            modifier= Modifier.align(Alignment.Center))
-        RecipeInfo(state,modifier = Modifier
+        RecipeImage( Image = state.image,
+            modifier= Modifier.align(Alignment.Center))
+        RecipeShortInfo(
+            state,
+            onClick,
+            modifier = Modifier
             .align(Alignment.CenterStart)
             .padding(start = 20.dp)
             .fillMaxWidth(0.6f))
         BookMarkButton(modifier= Modifier
             .align(Alignment.TopEnd)
             .padding(top = 10.dp, end = 10.dp))
-        FunctionRow(modifier= Modifier.align(Alignment.BottomEnd))
+        FunctionRow(state = state,
+            onEvent = onEvent,
+            modifier= Modifier.align(Alignment.BottomEnd))
     }
 }
 }
 
 @Composable
-fun RecipeImage(Image : Int,
+fun RecipeImage(Image : String?,
                 modifier: Modifier = Modifier) {
-    Image(painter = painterResource(Image),
-        "Image of dish",
+    AsyncImage(Image?.toUri(),
+        "Image of Dish",
         contentScale = ContentScale.Crop,
         colorFilter = ColorFilter.tint(Color.Gray,
             blendMode = BlendMode.Multiply),
         modifier = modifier
             .fillMaxWidth()
-    )
+            .height(200.dp))
+
 }
 
 @Composable
-fun RecipeInfo(state: RecipeEntity,
+fun RecipeShortInfo(state: RecipeEntity,
+                    onClick: (Int) -> Unit,
                modifier: Modifier = Modifier) {
     Column (modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)){
@@ -121,7 +132,9 @@ fun RecipeInfo(state: RecipeEntity,
             style = MaterialTheme.typography.titleMedium,
             color = Color.White,
            )
-        Button(onClick = {},
+        Button(onClick = {
+            onClick(state.id)
+        },
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1ebd4a)),
             contentPadding = PaddingValues(vertical = 5.dp, horizontal = 12.dp)) {
             Text(text ="Explore",
@@ -153,13 +166,20 @@ fun BookMarkButton(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FunctionRow(modifier: Modifier = Modifier) {
+fun FunctionRow(state : RecipeEntity ,
+                onEvent : (HomeScreenActions)-> Unit,
+                modifier: Modifier = Modifier) {
     Box (modifier
         .clip(shape = RoundedCornerShape(topStart = 20.dp, topEnd = 0.dp,
             bottomStart = 0.dp, bottomEnd = 0.dp))
         .background(Color(1f,1f,1f,0.5f))
         ){
         Row (){
+            IconButton(onClick = {onEvent(HomeScreenActions.DeleteRecipe(state))},
+                modifier= Modifier.padding(start = 2.dp)) {
+                Icon(imageVector = Icons.Default.Delete,//writing logic for filled like
+                    contentDescription = "Delete button",
+                ) }
             IconButton(onClick = {},
                 modifier= Modifier.padding(start = 2.dp)) {
                 Icon(imageVector = Icons.Default.FavoriteBorder,//writing logic for filled like

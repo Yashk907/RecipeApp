@@ -20,4 +20,7 @@ interface RecipeDao{
     @Query("SELECT * FROM RecipeTable ORDER BY title ASC")
     suspend fun getRecipesByAlphabatically() : List<RecipeEntity>
 
+    @Query("SELECT * FROM RecipeTable WHERE id =:id")
+    suspend fun getRecipeById(id : Int) : RecipeEntity
+
 }

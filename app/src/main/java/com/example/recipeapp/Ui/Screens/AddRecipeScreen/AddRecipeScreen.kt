@@ -2,6 +2,7 @@ package com.example.recipeapp.Ui.Screens.AddRecipeScreen
 
 import CustomBottomBar
 import CustomTopAppBar
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -26,6 +27,7 @@ private fun Preview() {
 //    AddRecipeScreen()
 }
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun AddRecipeScreen(
 //    onEvent : (AddRecipeEvents)-> Unit,
@@ -37,7 +39,4 @@ fun AddRecipeScreen(
                 state.value,
                 modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 10.dp))
-
-
-
 }

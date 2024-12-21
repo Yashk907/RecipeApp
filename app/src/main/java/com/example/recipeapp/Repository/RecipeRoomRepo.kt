@@ -13,7 +13,11 @@ class RecipeRoomRepo @Inject constructor(private val dao : RecipeDao) {
     val RecipeList : StateFlow<List<RecipeEntity>>
         get() =_RecipeList
 
-    suspend fun getAllRecipes() = dao.getAllRecipes()
+    suspend fun getAllRecipes() {//here we are inserting database into _RecipeList
+        val recipes =  dao.getAllRecipes()
+        _RecipeList.value=recipes
+    }
+    suspend fun getRecipeByid(id : Int) : RecipeEntity=dao.getRecipeById(id)
     suspend fun getRecipesbyAlphabet() =dao.getRecipesByAlphabatically()
     suspend fun createRecipe(Recipe : RecipeEntity) =dao.upsertRecipes(Recipe)
     suspend fun deleteRecipe(Recipe: RecipeEntity) =dao.deleteRecipes(Recipe)

@@ -36,9 +36,12 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
@@ -46,6 +49,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.TimePicker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -163,16 +167,6 @@ fun Duration(state: RecipeState,
     )
 }
 
-//SetThis from this point
-
-
-
-
-
-
-
-
-
 @Composable
 fun Veg_NonVeg(state: RecipeState,
                onEvent : (AddRecipeEvents)-> Unit,
@@ -210,12 +204,8 @@ fun Image(state: RecipeState,
     ) { uri ->
         uri?.let {
             try {
-                // Persist URI permission
-                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                context.contentResolver.takePersistableUriPermission(it, flag)
-
                 // Pass the URI as a string to the event handler
-                onEvent(AddRecipeEvents.addImage(it.toString()))
+                onEvent(AddRecipeEvents.addImage(it,context))
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -236,9 +226,14 @@ fun Image(state: RecipeState,
             }
             .background(Color.White) // Add a background if needed
     ){
-        if (state.ImageUri!=null){
-            AsyncImage(state.ImageUri.toUri(),"",
-                contentScale = ContentScale.Crop)
+        if(state.ImageUri=="Wait"){
+            LinearProgressIndicator(modifier= Modifier.fillMaxWidth()
+                .align(Alignment.BottomCenter))
+        }else{
+            if (state.ImageUri!=null){
+                AsyncImage(state.ImageUri.toUri(),"",
+                    contentScale = ContentScale.Crop)
+            }
         }
 
         Column(modifier= Modifier.align(Alignment.Center)) { Text("Add Image",
@@ -294,7 +289,7 @@ fun Ingredients(state: RecipeState,
                 // Weight Input
                 OutlinedTextField(
                     value = pair.second,
-                    label = { Text(text = "Weight") },
+                    label = { Text(text = "Quantity") },
                     onValueChange = { newValue ->
                         list[index] = pair.copy(second = newValue)
                         onEvent(AddRecipeEvents.addIngredientList(list))
@@ -311,7 +306,8 @@ fun Ingredients(state: RecipeState,
         IconButton(onClick = {
             list.add(Pair("", ""))
             onEvent(AddRecipeEvents.addIngredientList(list))
-        }) {
+        },
+            enabled = if (state.IngredientList!=listOf(Pair("",""))) true else false) {
             Box(
                 modifier = Modifier
                     .clip(CircleShape)
@@ -354,7 +350,7 @@ fun Directions(state: RecipeState,
             IconButton(onClick = {
                 DirectionList.add("")
                 onEvent(AddRecipeEvents.addDirectionsList(DirectionList))
-            }) {
+            }, enabled = if(state.DirectionsList!=listOf(""))true else false) {
                 Box(modifier = Modifier
                     .clip(CircleShape)
                     .background(Color.White)
@@ -385,9 +381,20 @@ fun TitleOfComponent(text : String,
 fun CreateButton(state: RecipeState,
                  onEvent : (AddRecipeEvents)-> Unit,
                  modifier: Modifier = Modifier) {
+    val Enabled = remember { mutableStateOf(false) }
+    if(state.ImageUri!="Wait" && state.ImageUri!=null &&
+        state.Title!="" && state.DirectionsList!=listOf("")
+        && state.IngredientList!=listOf(
+            Pair("" ,""))) {
+        Enabled.value=true
+    } else{
+        Enabled.value=false
+    }
 //adding logic when the button is activated and when not
     Button(onClick = {onEvent(AddRecipeEvents.CreateRecipe(state))},
-        modifier) {
+        modifier,
+        enabled =Enabled.value ,
+        ) {
         Text(text = "Create",
             style = MaterialTheme.typography.titleSmall)
 

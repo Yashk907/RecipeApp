@@ -56,33 +56,46 @@ dependencies {
 
 //HILT
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // ViewModel for Jetpack Compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // Optional: LiveData support
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     // Optional: SavedState module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1")
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
 
     //navigation
-    implementation("androidx.navigation:navigation-compose:2.7.4")
+    implementation(libs.androidx.navigation.compose)
     // Hilt Navigation for Jetpack Compose
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0-alpha01")
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //Gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
 
-    implementation("androidx.work:work-runtime-ktx:2.10.0")//workManager
+    implementation(libs.androidx.work.runtime.ktx)//workManager
 
     //coil
-    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+    //Firebase
+    // Import the Firebase BoM
+//    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+//
+//
+//    // TODO: Add the dependencies for Firebase products you want to use
+//    // When using the BoM, don't specify versions in Firebase dependencies
+//    implementation("com.google.firebase:firebase-analytics")
+//
+
+    // Add the dependencies for any other desired Firebase products
+    // https://firebase.google.com/docs/android/setup#available-libraries
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

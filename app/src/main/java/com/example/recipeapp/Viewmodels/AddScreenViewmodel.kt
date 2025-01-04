@@ -39,6 +39,7 @@ import java.io.FileOutputStream
 import javax.inject.Inject
 import kotlin.math.roundToInt
 import kotlin.time.Duration
+import kotlin.time.DurationUnit
 
 @HiltViewModel
 class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoomRepo) : ViewModel(){
@@ -90,6 +91,13 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
                     )
                 }
             }
+            is AddRecipeEvents.setDurationUnit -> {
+                _state.update{
+                    it.copy(
+                        DurationUnit = events.Unit
+                    )
+                }
+            }
             is AddRecipeEvents.setTitle -> {
                 _state.update{
                     it.copy(
@@ -101,7 +109,7 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
             is AddRecipeEvents.CreateRecipe -> {
                 val recipe = RecipeEntity(
                     title=state.value.Title,
-                    Duration=state.value.Duration,
+                    Duration=state.value.Duration+" "+state.value.DurationUnit,
                     Category = state.value.Category,
                     Ingredients=state.value.IngredientList,
                     Directions = state.value.DirectionsList,
@@ -124,6 +132,8 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
                 }
 
             }
+
+
         }
     }
 

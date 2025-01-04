@@ -18,7 +18,15 @@ class RecipeRoomRepo @Inject constructor(private val dao : RecipeDao) {
         _RecipeList.value=recipes
     }
     suspend fun getRecipeByid(id : Int) : RecipeEntity=dao.getRecipeById(id)
-    suspend fun getRecipesbyAlphabet() =dao.getRecipesByAlphabatically()
+    suspend fun getRecipesbyAlphabet(){
+        val recipes=dao.getRecipesByAlphabatically()
+        _RecipeList.value=recipes
+    }
+    suspend fun getFavouriteRecipes(){
+        val recipes =dao.getRecipesByFavourite()
+        _RecipeList.value=recipes
+    }
     suspend fun createRecipe(Recipe : RecipeEntity) =dao.upsertRecipes(Recipe)
     suspend fun deleteRecipe(Recipe: RecipeEntity) =dao.deleteRecipes(Recipe)
+    suspend fun updateRecipeForFavourite(favourite: Boolean ,id: Int)=dao.updateRecipeFavouriteOption(favourite,id)
 }

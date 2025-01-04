@@ -30,19 +30,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -66,11 +71,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PaintingStyle.Companion.Stroke
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -145,7 +152,7 @@ fun title(state: RecipeState,
         },
         label = {
             Text(text = "Title Of Recipe ")
-        },
+        }, keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         modifier= Modifier
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
@@ -156,15 +163,48 @@ fun title(state: RecipeState,
 fun Duration(state: RecipeState,
              onEvent : (AddRecipeEvents)-> Unit,
              modifier: Modifier = Modifier) {
-    OutlinedTextField(value = state.Duration,
-        onValueChange = {onEvent(AddRecipeEvents.setDuration(it))},
-        label = {Text(text = "Time ",
-            textAlign = TextAlign.Center)},
-        modifier= Modifier
-            .fillMaxWidth(0.3f)
-            .padding(horizontal = 10.dp)
-            .width(20.dp)
-    )
+    Row {
+        OutlinedTextField(value = state.Duration,
+            onValueChange = {onEvent(AddRecipeEvents.setDuration(it))},
+            label = {Text(text = "Time ",
+                textAlign = TextAlign.Center)},
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            modifier= Modifier
+                .fillMaxWidth(0.3f)
+                .padding(horizontal = 10.dp)
+                .width(20.dp)
+        )
+         val expanded = remember { mutableStateOf(false) }
+            IconButton(onClick = {expanded.value=true},
+                modifier= Modifier.align(Alignment.CenterVertically)
+                    .size(25.dp)
+            ) {
+                Icon(imageVector = Icons.Default.ArrowDropDown,
+                    "ArrowDropDown",
+                    modifier= Modifier)
+                DropdownMenu(expanded=expanded.value,
+                    onDismissRequest = {expanded.value=false}) {
+                    DropdownMenuItem(text = {Text("min")},
+                        onClick = {onEvent(AddRecipeEvents.setDurationUnit("min"))
+                            expanded.value=false},
+                        enabled = if(state.DurationUnit=="min"){
+                            false
+                        }else{
+                            true
+                        })
+                    DropdownMenuItem(text = {Text("hr")},
+                        onClick = {onEvent(AddRecipeEvents.setDurationUnit("hr"))
+                            expanded.value=false},
+                        enabled = if(state.DurationUnit=="hr"){
+                            false
+                        }else{
+                            true
+                        })
+                }
+            }
+    }
+
+
 }
 
 @Composable
@@ -270,7 +310,6 @@ fun Ingredients(state: RecipeState,
             .fillMaxWidth()
             .padding(horizontal = 10.dp)
     ) {
-
         list.forEachIndexed { index, pair ->
             Row {
                 // Ingredient Name Input
@@ -281,8 +320,9 @@ fun Ingredients(state: RecipeState,
                         list[index] = pair.copy(first = newValue)
                         onEvent(AddRecipeEvents.addIngredientList(list))
                     },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     modifier = Modifier
-                        .fillMaxWidth(0.7f)
+                        .fillMaxWidth(0.65f)
                         .padding(end = 2.dp)
                 )
 
@@ -294,14 +334,13 @@ fun Ingredients(state: RecipeState,
                         list[index] = pair.copy(second = newValue)
                         onEvent(AddRecipeEvents.addIngredientList(list))
                     },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 4.dp)
                 )
             }
         }
-
-
         // Add New Ingredient Button
         IconButton(onClick = {
             list.add(Pair("", ""))
@@ -341,6 +380,7 @@ fun Directions(state: RecipeState,
                     DirectionList[index]=newvalue
                     onEvent(AddRecipeEvents.addDirectionsList(DirectionList))
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier= Modifier
                     .fillMaxWidth()
                     .padding(end = 0.dp))

@@ -3,6 +3,7 @@ package com.example.recipeapp.Ui.Screens.RecipeInfoScreen
 import CustomBottomBar
 import CustomTopAppBar
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -56,6 +57,7 @@ fun RecipeInfoScreen(modifier: Modifier = Modifier) {
             Directions(state,modifier= Modifier.fillMaxWidth()
                 .padding(horizontal = 30.dp, vertical = 12.dp))
         }
+        Spacer(modifier= Modifier.padding(vertical = 10.dp))
 
 
     }

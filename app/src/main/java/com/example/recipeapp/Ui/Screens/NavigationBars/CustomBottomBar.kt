@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -20,9 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.example.recipeapp.Navigation.Screens
+import com.example.recipeapp.Setups.BottomNavigationBAr.BottomNavigationEvents
+import com.example.recipeapp.Viewmodels.BottomNavigationBarViewmodel
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 
 data class DrawerItem(
@@ -43,8 +47,11 @@ data class DrawerItem(
 //    }
 //}
 @Composable
-fun CustomBottomBar(navController: NavController,
+fun CustomBottomBar(viewmodel: BottomNavigationBarViewmodel,
+                    navController: NavController,
                     modifier: Modifier = Modifier) {
+    val onClick = viewmodel::OnBottomBarActions
+    val currentScreen = viewmodel.currentScreen.value
     val navigationItem=listOf(
         DrawerItem(
             string = "Recipes",
@@ -72,13 +79,13 @@ fun CustomBottomBar(navController: NavController,
     NavigationBar(modifier) {
         navigationItem.forEachIndexed { index, it ->
             NavigationBarItem(
-                selected = selectedDrawerIndex==index,
+                selected = it.ScreenName==currentScreen,
                 onClick = {
-                    navController.navigate(route = it.ScreenName) {  }
-                    selectedDrawerIndex=index
+                   onClick(BottomNavigationEvents.Onclick(ScreenName = it.ScreenName,
+                       navController = navController))
                 },
                 icon = {
-                    if(selectedDrawerIndex==index){
+                    if( it.ScreenName==currentScreen){
                         Icon(imageVector = it.selectedicon,
                             "")
                     }else Icon(imageVector = it.unselectedicon,
@@ -88,6 +95,7 @@ fun CustomBottomBar(navController: NavController,
                     Text(text = it.string)
                 }
             )
+            Log.d("navtest1", (it.ScreenName==currentScreen).toString())
         }
     }
 }

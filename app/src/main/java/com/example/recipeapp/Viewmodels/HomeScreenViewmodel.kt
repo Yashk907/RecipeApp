@@ -1,6 +1,9 @@
 package com.example.recipeapp.Viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipeapp.Repository.RecipeRoomRepo
@@ -8,7 +11,9 @@ import com.example.recipeapp.Room.RecipeEntity
 import com.example.recipeapp.Setups.HomeScreenSetup.HomeScreenActions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -21,10 +26,23 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
 
     init {
         viewModelScope.launch{
-            Repo.getAllRecipes()
+           Repo.getAllRecipes()
             Log.d("yashtest2",RecipeList.value.toString())
         }
     }
+
+    val _ScreenState = MutableStateFlow(HomeScreenState())
+    val ScreenState : StateFlow<HomeScreenState>
+        get() {
+            return _ScreenState
+        }
+
+    //Managing filters
+    val _CurrentFilter = mutableStateOf("other")
+    val CurrentFilter : State<String>
+        get() {
+            return _CurrentFilter
+        }
 
     fun onActionHomeScreen(events : HomeScreenActions){
         when(events) {
@@ -36,7 +54,30 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
                         deleteImage(events.Recipe)
                     }
                 }
+            }
 
+            is HomeScreenActions.ShowDeleteDialog -> {
+                _ScreenState.update{
+                    it->
+                    it.copy(
+                        openDeleteDialog = events.show
+                    )
+                }
+            }
+
+            is HomeScreenActions.AddToFavourite ->{
+                viewModelScope.launch{
+                    Repo.updateRecipeForFavourite(events.favourite,events.id)
+                    ReloadList()
+                }
+
+        }
+
+            is HomeScreenActions.setFilter -> {
+                _CurrentFilter.value=events.Filter
+                viewModelScope.launch{
+                    ReloadList()
+                }
             }
         }
 
@@ -49,4 +90,19 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
         }
     }
 
+
+
+   suspend private fun ReloadList(){
+        when(CurrentFilter.value){
+            "All"->Repo.getAllRecipes()
+            "A-Z"->Repo.getRecipesbyAlphabet()
+            "Favourite"->Repo.getFavouriteRecipes()
+            else -> Repo.getAllRecipes()
+        }
+    }
+
 }
+
+data class HomeScreenState(
+    val openDeleteDialog : Boolean =false
+)

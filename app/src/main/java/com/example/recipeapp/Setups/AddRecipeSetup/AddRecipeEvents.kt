@@ -6,6 +6,7 @@ import android.net.Uri
 sealed interface AddRecipeEvents {
     data class setTitle(val Title : String) : AddRecipeEvents
     data class setDuration(val Time : String) : AddRecipeEvents
+    data class setDurationUnit(val Unit : String) :  AddRecipeEvents
     data class setCategory(val category : String) : AddRecipeEvents
     data class addImage(val image : Uri,
         val context: Context) : AddRecipeEvents

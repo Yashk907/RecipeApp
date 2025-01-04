@@ -1,5 +1,8 @@
 
+import android.app.Activity
+import android.content.Context
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -14,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.recipeapp.Navigation.Screens
 import com.example.recipeapp.R
 import com.example.recipeapp.Ui.Screens.HomeScreen.RecipeSmallCard
 import com.example.recipeapp.Viewmodels.HomeScreenViewmodel
@@ -72,28 +78,25 @@ import com.example.recipeapp.ui.theme.RecipeAppTheme
 
 
 @Composable
-fun HomeScreen(onClickCard : (id : Int)-> Unit,
+fun HomeScreen(
+               onClickCard : (id : Int)-> Unit,
                modifier: Modifier = Modifier) {
     val viewmodel : HomeScreenViewmodel = hiltViewModel()
     val onEvent =viewmodel::onActionHomeScreen
     val list = viewmodel.RecipeList.collectAsState()
-    Log.d("RecipeList1",list.value.toString())
+    val screenState =viewmodel.ScreenState.collectAsState()
+    val filterstate=viewmodel.CurrentFilter.value
+
     LazyColumn(modifier=modifier) {
         item{
             TopComponentMainScreen(modifier= Modifier)
         }
         item{
-            Chiprow(modifier= Modifier.padding(start = 22.dp, end = 12.dp))
+            Chiprow(filterState =filterstate,
+                onevent = onEvent,
+                modifier= Modifier.padding(start = 22.dp, end = 12.dp))
         }
-//        item{
-////            RecipeSmallCard(modifier = Modifier.padding(horizontal = 22.dp, vertical = 10.dp))
-//            Box(modifier= Modifier.fillMaxSize()) {
-//                CardStack(list = datastore().list,
-//                    modifier= Modifier.align(Alignment.Center)
-//                    .padding(10.dp))
-//            }
 
-//        }
         if(list.value.isEmpty()){
             item{
                 Box(modifier= Modifier.fillMaxWidth()
@@ -111,6 +114,7 @@ fun HomeScreen(onClickCard : (id : Int)-> Unit,
         items(list.value) { item ->//this is temporary datastore
 
             RecipeSmallCard(state = item,
+                state2=screenState.value,
                 onEvent = onEvent
                 ,onClickCard,
                 modifier= Modifier.padding(horizontal = 13.dp, vertical = 10.dp)
@@ -118,5 +122,6 @@ fun HomeScreen(onClickCard : (id : Int)-> Unit,
             )
         }
     }
-    
 }
+
+    

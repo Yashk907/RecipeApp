@@ -13,13 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.recipeapp.Navigation.Navigation
+import com.example.recipeapp.Setups.BottomNavigationBAr.BottomNavigationEvents
 import com.example.recipeapp.Ui.Screens.AddRecipeScreen.AddRecipeScreen
+import com.example.recipeapp.Viewmodels.BottomNavigationBarViewmodel
 
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,16 +36,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             RecipeAppTheme {
                 val NavController =  rememberNavController()
+                val bottomNavigationBarViewmodel : BottomNavigationBarViewmodel = hiltViewModel()
                 Scaffold(topBar = {CustomTopAppBar()},
-                    bottomBar = {CustomBottomBar(navController = NavController)}) {
+                    bottomBar = {CustomBottomBar(bottomNavigationBarViewmodel,
+                        navController = NavController)}) {
                     padding->
                     Box(modifier = Modifier.fillMaxSize()
                         .padding(padding)) {
-                        Navigation(navController = NavController)
+                        Navigation(bottomNavigationBarViewmodel,
+                            navController = NavController)
                     }
                 }
             }
         }
+
     }
 }
 

@@ -15,24 +15,28 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.recipeapp.Setups.HomeScreenSetup.HomeScreenActions
 import java.util.logging.Filter
 
 @Composable
-fun Chiprow(modifier: Modifier = Modifier) {
+fun Chiprow(filterState : String,
+            onevent : (HomeScreenActions)-> Unit,
+            modifier: Modifier = Modifier) {
     val scrollState=rememberScrollState()
-    var selectedIndex by rememberSaveable { mutableStateOf(0) }
-    val items =listOf<String>("Favourite",
-        "A-z",
-        "Newest")
-
+    val items =listOf<String>("All",
+        "A-Z",
+        "Favourite")
 
     Row(modifier= modifier.fillMaxWidth()
         .horizontalScroll(scrollState)
     , horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         items.forEachIndexed { index, string ->
             FilterChips(string,
-                selected =selectedIndex==index,
-                onClick = {selectedIndex=index},
+                selected =filterState==string,
+                onClick = {
+                    if (filterState!=string){
+                        onevent(HomeScreenActions.setFilter(string))
+                    } },
                 modifier = Modifier)
         }
         }

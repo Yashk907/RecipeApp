@@ -12,6 +12,7 @@ data class RecipeEntity(
     val Ingredients : List<Pair<String, String>> = listOf(),
     val Directions : List<String> = listOf(),
     val image : String?=null,
+    val favourite : Boolean =false,
     @PrimaryKey(autoGenerate = true)
     val id  : Int =0
 )

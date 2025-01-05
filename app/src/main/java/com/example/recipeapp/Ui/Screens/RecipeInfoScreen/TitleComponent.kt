@@ -46,7 +46,7 @@ fun TitleOfRecipe(state : RecipeEntity,
             modifier= Modifier
                 .align(Alignment.CenterHorizontally)
             )
-        Text(text="by yash karande",
+        Text(text="by yash",
             fontWeight = FontWeight.Light,
             fontSize = 15.sp,
             textAlign = TextAlign.Center,

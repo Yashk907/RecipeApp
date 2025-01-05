@@ -28,7 +28,6 @@ class RecipeScreenViewmodel @Inject constructor(private val repo: RecipeRoomRepo
 
     init {
         val id= savedStateHandle.get<String>("id")!!.toInt()
-
         if(id!=null){
             getRecipeByid(id)
         }

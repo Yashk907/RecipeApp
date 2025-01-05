@@ -131,7 +131,7 @@ fun RecipeShortInfo(state: RecipeEntity,
     Column (modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)){
         Card(colors = CardDefaults.cardColors(contentColor =Color.White)) {
-            Text(text = "BreakFast",
+            Text(text = state.MealType,
                 color = Color.Black,
                 style = MaterialTheme.typography.labelMedium,
                 modifier= Modifier.padding(vertical = 5.dp,

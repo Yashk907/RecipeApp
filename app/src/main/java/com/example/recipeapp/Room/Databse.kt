@@ -7,7 +7,7 @@ import com.example.recipeapp.Room.Converters.Converters
 
 @Database(
 entities =[RecipeEntity::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

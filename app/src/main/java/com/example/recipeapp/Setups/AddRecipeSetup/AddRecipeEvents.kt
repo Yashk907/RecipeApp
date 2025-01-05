@@ -13,4 +13,5 @@ sealed interface AddRecipeEvents {
     data class addIngredientList(val list : List<Pair<String, String>>) : AddRecipeEvents
     data class addDirectionsList(val list :  List<String>) : AddRecipeEvents
     data class CreateRecipe(val Recipe : RecipeState) : AddRecipeEvents
+    data class AddMealType(val Type : String) : AddRecipeEvents
 }

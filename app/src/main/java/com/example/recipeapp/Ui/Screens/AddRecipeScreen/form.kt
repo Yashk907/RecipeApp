@@ -6,6 +6,7 @@ import android.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.health.connect.datatypes.MealType
 import android.media.Image
 import android.text.Layout
 import android.util.Log
@@ -15,8 +16,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +34,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -85,6 +90,7 @@ import androidx.core.net.toUri
 import coil3.compose.AsyncImage
 import com.example.recipeapp.Setups.AddRecipeSetup.AddRecipeEvents
 import com.example.recipeapp.Setups.AddRecipeSetup.RecipeState
+import com.example.recipeapp.enumClasses.MealTypeclass
 import com.example.recipeapp.ui.theme.RecipeAppTheme
 import java.time.Duration
 
@@ -127,8 +133,10 @@ fun RecipeForm(onEvent : (AddRecipeEvents)-> Unit,
                 Veg_NonVeg(state,onEvent,)
 
             }
+            TitleOfComponent("Type of Meal")
+            MealType(state,onEvent,modifier.fillMaxWidth())
             TitleOfComponent("Image")
-            Image(state,onEvent,)
+            Imagecomposable(state,onEvent,)
            TitleOfComponent("Ingredient")
             Ingredients(state,onEvent,)
             TitleOfComponent("Directions")
@@ -176,7 +184,8 @@ fun Duration(state: RecipeState,
         )
          val expanded = remember { mutableStateOf(false) }
             IconButton(onClick = {expanded.value=true},
-                modifier= Modifier.align(Alignment.CenterVertically)
+                modifier= Modifier
+                    .align(Alignment.CenterVertically)
                     .size(25.dp)
             ) {
                 Icon(imageVector = Icons.Default.ArrowDropDown,
@@ -208,6 +217,36 @@ fun Duration(state: RecipeState,
 }
 
 @Composable
+fun MealType(state: RecipeState,
+             onEvent: (AddRecipeEvents) -> Unit,
+             modifier: Modifier = Modifier) {
+    val expanded=remember { mutableStateOf(false) }
+    Box (modifier.clickable{
+        expanded.value=true
+
+    }
+        .padding(0.dp)
+        .background(color = Color.White)
+        .border(1.dp, Color.Black, RoundedCornerShape(4.dp))){
+        Text(text = state.MealType,
+            modifier= Modifier.padding(15.dp)
+                .align(Alignment.CenterStart)
+            )
+        Image(imageVector = Icons.Default.ArrowDropDown,
+            contentDescription = "DownArrowButton",
+            modifier= Modifier.padding(end = 5.dp).align(Alignment.CenterEnd))
+        DropdownMenu(expanded=expanded.value,
+           onDismissRequest = {expanded.value=false} ) {
+            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.BreakFast}"))},
+                text = {Text(text ="${MealTypeclass.BreakFast}" )})
+            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Lunch}"))},
+                text = {Text(text ="${MealTypeclass.Lunch}" )})
+            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Dinner}"))},
+                text = {Text(text ="${MealTypeclass.Dinner}" )})
+        }
+    }
+}
+@Composable
 fun Veg_NonVeg(state: RecipeState,
                onEvent : (AddRecipeEvents)-> Unit,
                modifier: Modifier = Modifier) {
@@ -231,7 +270,7 @@ fun Veg_NonVeg(state: RecipeState,
 }
 
 @Composable
-fun Image(state: RecipeState,
+fun Imagecomposable(state: RecipeState,
           onEvent : (AddRecipeEvents)-> Unit,
           modifier: Modifier = Modifier) {
     //photo pick logic
@@ -267,7 +306,8 @@ fun Image(state: RecipeState,
             .background(Color.White) // Add a background if needed
     ){
         if(state.ImageUri=="Wait"){
-            LinearProgressIndicator(modifier= Modifier.fillMaxWidth()
+            LinearProgressIndicator(modifier= Modifier
+                .fillMaxWidth()
                 .align(Alignment.BottomCenter))
         }else{
             if (state.ImageUri!=null){
@@ -413,7 +453,8 @@ fun TitleOfComponent(text : String,
     Text(
         "${text} :",
         style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier.padding(horizontal = 13.dp)
+        modifier = Modifier.padding(horizontal = 13.dp,
+            vertical = 5.dp)
     )
 }
 

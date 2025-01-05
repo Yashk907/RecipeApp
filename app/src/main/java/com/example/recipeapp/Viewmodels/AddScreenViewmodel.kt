@@ -20,7 +20,6 @@ import com.example.recipeapp.Repository.RecipeRoomRepo
 import com.example.recipeapp.Room.RecipeEntity
 import com.example.recipeapp.Setups.AddRecipeSetup.AddRecipeEvents
 import com.example.recipeapp.Setups.AddRecipeSetup.RecipeState
-import com.example.recipeapp.Ui.Screens.AddRecipeScreen.Image
 import com.example.recipeapp.Ui.Screens.AddRecipeScreen.Ingredients
 import com.example.recipeapp.Ui.Screens.AddRecipeScreen.title
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -110,6 +109,7 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
                 val recipe = RecipeEntity(
                     title=state.value.Title,
                     Duration=state.value.Duration+" "+state.value.DurationUnit,
+                    MealType = state.value.MealType,
                     Category = state.value.Category,
                     Ingredients=state.value.IngredientList,
                     Directions = state.value.DirectionsList,
@@ -133,7 +133,13 @@ class AddScreenViewmodel @Inject constructor(private val RecipeRepo : RecipeRoom
 
             }
 
-
+            is AddRecipeEvents.AddMealType -> {
+                _state.update{
+                    it.copy(
+                        MealType = events.Type
+                    )
+                }
+            }
         }
     }
 

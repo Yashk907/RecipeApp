@@ -237,11 +237,17 @@ fun MealType(state: RecipeState,
             modifier= Modifier.padding(end = 5.dp).align(Alignment.CenterEnd))
         DropdownMenu(expanded=expanded.value,
            onDismissRequest = {expanded.value=false} ) {
-            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.BreakFast}"))},
+            DropdownMenuItem(enabled = state.MealType!="${MealTypeclass.BreakFast}",
+                onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.BreakFast}"))
+                                       expanded.value=false},
                 text = {Text(text ="${MealTypeclass.BreakFast}" )})
-            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Lunch}"))},
+            DropdownMenuItem(enabled = state.MealType!="${MealTypeclass.Lunch}",
+                onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Lunch}"))
+                expanded.value=false},
                 text = {Text(text ="${MealTypeclass.Lunch}" )})
-            DropdownMenuItem(onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Dinner}"))},
+            DropdownMenuItem(enabled = state.MealType!="${MealTypeclass.Dinner}",
+                onClick = {onEvent(AddRecipeEvents.AddMealType("${MealTypeclass.Dinner}"))
+                expanded.value=false},
                 text = {Text(text ="${MealTypeclass.Dinner}" )})
         }
     }

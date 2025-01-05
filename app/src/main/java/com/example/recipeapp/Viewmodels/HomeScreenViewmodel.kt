@@ -31,14 +31,14 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
         }
     }
 
-    val _ScreenState = MutableStateFlow(HomeScreenState())
+    private val _ScreenState = MutableStateFlow(HomeScreenState())
     val ScreenState : StateFlow<HomeScreenState>
         get() {
             return _ScreenState
         }
 
     //Managing filters
-    val _CurrentFilter = mutableStateOf("other")
+    private val _CurrentFilter = mutableStateOf("other")
     val CurrentFilter : State<String>
         get() {
             return _CurrentFilter
@@ -46,15 +46,6 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
 
     fun onActionHomeScreen(events : HomeScreenActions){
         when(events) {
-            is HomeScreenActions.DeleteRecipe -> {
-                viewModelScope.launch{
-                    Repo.deleteRecipe(events.Recipe)
-                    Repo.getAllRecipes()
-                    viewModelScope.launch(Dispatchers.IO){
-                        deleteImage(events.Recipe)
-                    }
-                }
-            }
 
             is HomeScreenActions.ShowDeleteDialog -> {
                 _ScreenState.update{
@@ -77,6 +68,23 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
                 _CurrentFilter.value=events.Filter
                 viewModelScope.launch{
                     ReloadList()
+                }
+            }
+
+            HomeScreenActions.DeleteRecipe -> {
+                viewModelScope.launch{
+                    Repo.deleteRecipe(ScreenState.value.DeleteEntity)
+                    Repo.getAllRecipes()
+                    viewModelScope.launch(Dispatchers.IO){
+                        deleteImage(ScreenState.value.DeleteEntity)
+                    }
+                }
+            }
+            is HomeScreenActions.setDeleteEntity -> {
+                _ScreenState.update{
+                    it.copy(
+                        DeleteEntity = events.state
+                    )
                 }
             }
         }
@@ -104,5 +112,6 @@ class HomeScreenViewmodel @Inject constructor(private val Repo : RecipeRoomRepo)
 }
 
 data class HomeScreenState(
-    val openDeleteDialog : Boolean =false
+    val openDeleteDialog : Boolean =false,
+    val DeleteEntity : RecipeEntity = RecipeEntity()
 )

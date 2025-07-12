@@ -1,45 +1,77 @@
-🍽️ RecipeShare
-RecipeShare is a modern Android application that allows users to create, save, and view their favorite recipes locally. Built with Jetpack Compose, Room database, MVI architecture, and Hilt for dependency injection, RecipeShare ensures a smooth and responsive user experience while keeping everything offline and private.
+     # 🍲 RecipeShare
 
-🚀 Features
-📄 Create and edit detailed recipes with ingredients, instructions, and images
+        **RecipeShare** is a beautiful and intuitive Android application built with **Jetpack Compose**, **Room Database**, and **MVI architecture**, designed to help users create, store, and browse their favorite recipes — completely offline.
 
-🖼️ Upload and compress images to reduce storage size
+        ---
 
-🧭 Built with MVI architecture for clean state management
+        ## ✨ Overview
 
-💾 Stores recipes locally using Room Database
+        RecipeShare provides a seamless experience for cooking enthusiasts to save their culinary creations. Users can easily add step-by-step instructions, ingredients, and photos for each recipe. All data is stored locally, ensuring full control over your collection even without internet access.
 
-🧪 Tested and modular codebase with Hilt for dependency injection
+        ---
 
-🔍 Easy browsing of saved recipes in a user-friendly UI built with Jetpack Compose
+        ## 🚀 Tech Stack
 
-🛠️ Tech Stack
-Kotlin
+        - 🛠️ **Jetpack Compose** – Modern UI toolkit  
+        - 💾 **Room Database** – Local storage for recipes  
+        - 🧠 **MVI Architecture** – Unidirectional data flow for better state management  
+        - 💉 **Hilt** – Dependency Injection  
+        - ⚙️ **Kotlin** – Primary development language  
+        - 🖼️ **Image Compression** – For storing optimized recipe images  
 
-Jetpack Compose
+        ---
 
-Room (SQLite)
+        ## 🗂️ Key Features
 
-Hilt (DI)
+        ### 📝 Add & Edit Recipes
+        - Title, ingredients, and preparation steps  
+        - Add a photo to make your recipe more appealing  
+        - Recipes are editable and stored offline  
 
-MVI Architecture (Model–View–Intent)
+        ### 🖼️ Image Handling
+        - Capture image from camera or select from gallery  
+        - Compress images before saving to reduce space usage  
 
-Coroutines & StateFlow
+        ### 📚 View Recipes
+        - Scrollable list of saved recipes  
+        - View full recipe details with image  
+        - Easy navigation with modern Compose UI  
 
-Image Compression
+        ### 🔍 Search & Categorize *(Planned)*
+        - Search recipes by name or ingredient  
+        - Categorization based on type (e.g., Dessert, Main Course)  
 
-📸 Screenshots
-Add screenshots here to showcase your UI.
+        ### 💾 Offline-first
+        - All data is stored locally using Room  
+        - No internet connection required  
 
-📦 Installation
-Clone the repo:
+        ---
 
-bash
-Copy
-Edit
-git clone https://github.com/yourusername/recipeshare.git
-Open in Android Studio
+        ## 🖼️ Screenshots
 
-Run on emulator or physical device
+        | Screen             | Preview           |
+        |--------------------|-------------------|
+        | Home / Recipes List | *Coming Soon*     |
+        | Add Recipe         | *Coming Soon*     |
+        | Recipe Details     | *Coming Soon*     |
 
+        > 🧪 **Demo video and more screenshots coming soon...**
+
+        ---
+
+        ## 📦 Installation
+
+        1. Clone the repository:
+        ```bash
+        git clone https://github.com/yourusername/recipeshare.git
+        ```
+        2. Open the project in **Android Studio**  
+        3. Run the app on an emulator or physical device  
+
+        ---
+
+        ## 📥 Download APK
+
+        📲 **[Download Latest APK](https://your-apk-download-link)**
+
+        ---

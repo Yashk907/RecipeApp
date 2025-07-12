@@ -52,7 +52,7 @@
 | Screen             | Preview           |
 |--------------------|-------------------|
 | Home Screen(empty) | ![HomeScreen](assets/homescreen.jpeg)|
-| Home Screen(Recipe added) | ![HomeScreen](assets/HomeScreen(added).jpeg)|
+| Home Screen(Recipe added) | ![HomeScreen](assets/HomeScreen(Added).jpeg)|
 | Add Recipe (empty) | ![AddRecipe](assets/addRecipe.jpeg)|
 | Add Recipe (added) | ![AddRecipe](assets/AddRecipeEmpty.jpeg)|
 | Recipe Details     | ![RecipeDetails](assets/RecipeInfoDirection.jpeg)|

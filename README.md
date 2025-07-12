@@ -51,7 +51,7 @@
 
 | Screen             | Preview           |
 |--------------------|-------------------|
-| Home / Recipes List | *Coming Soon*     |
+| Home Screen(empty) | ![HomeScreen](assets/HomeScreen(empty).jpeg|
 | Add Recipe         | *Coming Soon*     |
 | Recipe Details     | *Coming Soon*     |
 

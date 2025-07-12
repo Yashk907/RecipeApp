@@ -29,7 +29,7 @@
 - Recipes are editable and stored offline  
 
 ### 🖼️ Image Handling
-  - Capture image from camera or select from gallery  
+  - select image from gallery  
   - Compress images before saving to reduce space usage  
 
 ### 📚 View Recipes
@@ -37,9 +37,6 @@
 - View full recipe details with image  
 - Easy navigation with modern Compose UI  
 
-### 🔍 Search & Categorize *(Planned)*
-- Search recipes by name or ingredient  
-- Categorization based on type (e.g., Dessert, Main Course)  
 
 ### 💾 Offline-first
 - All data is stored locally using Room  

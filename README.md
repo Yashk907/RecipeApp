@@ -1,4 +1,4 @@
-     # 🍲 RecipeShare
+# 🍲 RecipeShare
 
         **RecipeShare** is a beautiful and intuitive Android application built with **Jetpack Compose**, **Room Database**, and **MVI architecture**, designed to help users create, store, and browse their favorite recipes — completely offline.
 

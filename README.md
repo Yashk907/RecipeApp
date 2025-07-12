@@ -60,16 +60,8 @@
 
 ---
 
-## 📦 Installation
-
-1. Clone the repository:
-2. Open the project in **Android Studio**  
-3. Run the app on an emulator or physical device  
-
----
-
 # 📥 Download APK
 
-📲 **[Download Latest APK](https://your-apk-download-link)**
+📲 **[Download Latest APK](https://drive.google.com/file/d/12cFrSYafBOqCO7NtEjCh2vvwc6knBJ_C/view?usp=drive_link)**
 
 ---

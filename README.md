@@ -53,8 +53,8 @@
 |--------------------|-------------------|
 | Home Screen(empty) | ![HomeScreen](assets/homescreen.jpeg)|
 | Home Screen(Recipe added) | ![HomeScreen](assets/HomeScreen(Added).jpeg)|
-| Add Recipe (empty) | ![AddRecipe](assets/addRecipe.jpeg)|
-| Add Recipe (added) | ![AddRecipe](assets/AddRecipeEmpty.jpeg)|
+| Add Recipe (empty) | ![AddRecipe](assets/addRecipeEmpty.jpeg)|
+| Add Recipe (added) | ![AddRecipe](assets/AddRecipe.jpeg)|
 | Recipe Details     | ![RecipeDetails](assets/RecipeInfoDirection.jpeg)|
 | Recipe Details     | ![RecipeDetails](assets/RecipeInfoIngre.jpeg)|
 

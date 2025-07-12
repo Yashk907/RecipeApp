@@ -52,10 +52,11 @@
 | Screen             | Preview           |
 |--------------------|-------------------|
 | Home Screen(empty) | ![HomeScreen](assets/homescreen.jpeg)|
-| Add Recipe         | *Coming Soon*     |
-| Recipe Details     | *Coming Soon*     |
-
-> 🧪 **Demo video and more screenshots coming soon...**
+| Home Screen(Recipe added) | ![HomeScreen](assets/HomeScreen(added).jpeg)|
+| Add Recipe (empty) | ![AddRecipe](assets/addRecipe.jpeg)|
+| Add Recipe (added) | ![AddRecipe](assets/AddRecipeEmpty.jpeg)|
+| Recipe Details     | ![RecipeDetails](assets/RecipeInfoDirection.jpeg)|
+| Recipe Details     | ![RecipeDetails](assets/RecipeInfoIngre.jpeg)|
 
 ---
 
